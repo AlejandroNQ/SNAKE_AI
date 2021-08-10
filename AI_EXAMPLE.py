@@ -1,32 +1,18 @@
 import requests as req
 import numpy as np
-import time
 import json
 
-path = "master/players/0"
-game = {}
-player = json.loads(req.get("http://127.0.0.1:5000/" + path).text) 
-
-banned_dir = [0, 2, 1, 4, 3] #doesn't allow snakes to go backwards
-
-#   {
-#       'id': 1,       #int
-#       'x': 2,        #int
-#       'y': 2,        #int
-#       'score': 4,    #int
-#       'dir': 4,      #int
-#       'prevdir': 4,  #int
-#       'alive': True  #bool
-#   }
+base_url = 'https://alejandronq.pythonanywhere.com/'
+path = "master"
+data = json.loads(req.get(base_url + path).text)  
 
 while player['alive']:
-    #time.sleep(0.4)
     while player['dir'] != 0:   #waits for game to reply
-        player.update(json.loads(req.get("http://127.0.0.1:5000/" + path).text))
+        player.update(json.loads(req.get(base_url + path).text))
     
-    food = json.loads(req.get("http://127.0.0.1:5000/master/food").text) 
+    food = json.loads(req.get(base_url + "master/food").text) 
     
-    game.update(json.loads(req.get("http://127.0.0.1:5000/" + 'master/game').text))
+    game.update(json.loads(req.get(base_url + 'master/game').text))
     
     card_dist_food = [0 for f in food]
     dist_food      = [0 for f in food]
@@ -98,15 +84,4 @@ while player['alive']:
     #print()
     
     print(player['dir'])
-    req.put("http://127.0.0.1:5000/player0/dir", data = json.dumps({'dir':player['dir']}))
-
-
-
-
-
-
-#path = "master/game"
-#response = json.loads(req.get("http://127.0.0.1:5000/" + path).text)
-#
-#response['width']=16
-#req.put("http://127.0.0.1:5000/login", data = json.dumps({'game':response}))
+    req.put(base_url + "player0/dir", data = json.dumps({'dir':player['dir']}))
