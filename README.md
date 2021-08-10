@@ -13,7 +13,7 @@ The goal is to make this a avaliable for anyone interested regardless of their c
 
 All aspects of the game you may be concerned about are stored in a JSON file with the following structure:
 
-```javascript
+```JavaScript
 data = {
     'game':{
         'height': 16, 
@@ -100,4 +100,66 @@ The term AI here is understood acording to [this definition](https://en.wikipedi
 
 ## Examples
 
-Python - 
+#### Python - 
+GET
+```Python
+import requests as req
+import json
+
+base_url = 'https://alejandronq.pythonanywhere.com/'
+
+data = json.loads(req.get(base_url + 'master').text)                #retrieves the whole 'data' dictionary
+game = json.loads(req.get(base_url + 'master/game').text)           #retrieves just the 'game' object
+board = json.loads(req.get(base_url + 'master/game/board').text)    #retrieves even more specific items
+
+#NOT CURRENTLY SUPPORTED
+player = json.loads(req.get(base_url + 'player').text)              #retrieves whichever player you have been assigned to
+```
+
+PUT
+```Python
+import requests as req
+import json
+
+
+req.put(base_url + "player0/dir", data = json.dumps({'dir':player['dir']})) 
+```
+
+**NOTE:** Looking for any specific language not listed here? You can help expand this list
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
