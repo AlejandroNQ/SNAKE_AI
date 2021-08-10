@@ -6,12 +6,12 @@ Well, yes, but here's the catch: **it's not designed for human players**, but ra
 ## The game:
 The game itself is somewhere between the classical [Snake](https://en.wikipedia.org/wiki/Snake_(video_game_genre)) game we all know and love and the even older [Blockade](https://en.wikipedia.org/wiki/Blockade_(video_game)) (or the better known 1982 [Tron](https://en.wikipedia.org/wiki/Tron_(video_game)) Light Cycles). It combines the best of both worlds. With Blockade's PvP gameplay and Snake's growing mechanics it's a fun competitive game yet simple as can be.
 
-The code for the game itself won't be avaliable anytime in the near future but 
+The code for the game itself won't be avaliable anytime in the near future but documentation for the gameplay is avaliable here
 
 ## The API:
 The goal is to make this a avaliable for anyone interested regardless of their coding experience, for that very reason we use a [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfer) web API, meaning (among other things), that it can be accessed from anywhere. The main goal with this aproach is to make it language independent, which is also why data is always handled in [JSON](https://en.wikipedia.org/wiki/JSON).
 
-All relevant aspects of the game are stored in a JSON file with the following structure:
+All aspects of the game you may be concerned about are stored in a JSON file with the following structure:
 
 ```javascript
 data = {
@@ -56,6 +56,35 @@ data = {
     ]
 }
 ```
+
+while most of these keys are pretty self-explanatory, there are some details worth mentioning:
+* **The board:** `game.board` is the main source of information about the game state, it's an array (python list) of `game.height` arrays (python lists again) of length `game.width` integers which contain both the food and all the snakes. A typical board may look something like this:
+```
+                  actual int values                                 graphic representation (console GUI)
+
+    0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · · · · · · · · · · · · · · · · 
+    0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · · @ · · · · · · · · · · · · · 
+    0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · · · · · · · · · · · · · · · · 
+    0  0 28  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · · + · · · · · · · · · · · · · 
+    0  0 25 22 19  0  0  0  0  0  0  0  0  0  0  0          │         · · ╚═══╗ · · · · · · · · · · · 
+    0  0  0  0 13  0  0  0  0  0  0  0  0  0  0  0          │         · · · · ║ · · · · · · · · · · · 
+    0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0          │         · · · · ║ · · · · · · · · · · · 
+    0  0  0  0  7  4  1  0  0  0  0  0  0  0  0  0          │         · · · · ╚═══╗ · · · · · · · · · 
+   11 14  0  0  0  0  0  0  0  0  0  0  0  2  5  8          │        ───┐ · · · · · · · · · · · └──── 
+    0 20  0  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · │ · · · · · · · · · · · · · · 
+    0 23  0  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · + · · · · · · · · · · · · · · 
+    0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · · · · · · · · · · · · · · · · 
+    0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · · · · · · · · · · · · · · · · 
+    0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · · · · · · · · · · · · · · · · 
+    0  0  0 -1  0  0  0  0  0  0  0  0  0  0  0  0          │         · · · @ · · · · · · · · · · · · 
+    0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0          │         · · · · · · · · · · · · · · · · 
+```
+it's coded in the following way:
+  * zeros are empty squares
+  * negative numbers represent food, with its magnitude being the value of each food item (higher values make snakes grow more). Although for now, the game only spawns food with value = 1.
+  * positive values represent spaces taken by snakes acording to the following criteria:
+    * let n be the number of players in the current game plus one (for the example above n=3). For any given player, all slots in its snake are [congruent](https://en.wikipedia.org/wiki/Modular_arithmetic#Congruence) [modulo](https://en.wikipedia.org/wiki/Modular_arithmetic#Congruence) n to its `id` plus one (follwing the example: player 0 is shown as ╚═╗ on the right and player 1 as └─┐)
+* 
 
 Different parts of it can be accessed as follows:
 `base_url/`
